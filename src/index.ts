@@ -11,8 +11,19 @@ export function swc(opts: SwcOptions = {}): Plugin {
   const include = opts.include ?? /\.[jt]sx?$/;
 
   return {
-    name: 'jujulego:swc',
+    name: '@jujulego/vite-plugin-swc',
     enforce: 'pre',
+    async resolveId(source, importer, options) {
+      if (source.startsWith('@swc/helpers/_')) {
+        const resolution = await this.resolve('@swc/helpers', importer, options);
+
+        if (resolution?.external) {
+          return { id: source, external: true };
+        }
+      }
+
+      return null;
+    },
     async transform(code, id) {
       if (!include.exec(id)) {
         return;
