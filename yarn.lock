@@ -479,6 +479,7 @@ __metadata:
     "@vitest/coverage-v8": 0.34.6
     eslint: 8.54.0
     eslint-plugin-vitest: 0.3.9
+    rollup: 4.4.1
     shx: 0.3.4
     typescript: 5.2.2
     vite: 5.0.0
@@ -4097,7 +4098,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup@npm:^4.2.0":
+"rollup@npm:4.4.1, rollup@npm:^4.2.0":
   version: 4.4.1
   resolution: "rollup@npm:4.4.1"
   dependencies:
