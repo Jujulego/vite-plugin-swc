@@ -46,7 +46,7 @@
     "@vitest/coverage-v8": "0.34.6",
     "eslint": "8.54.0",
     "eslint-plugin-vitest": "0.3.10",
-    "rollup": "4.6.0",
+    "rollup": "4.6.1",
     "shx": "0.3.4",
     "typescript": "5.3.2",
     "vite": "5.0.4",
