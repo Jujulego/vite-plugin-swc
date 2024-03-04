@@ -885,16 +885,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@swc/helpers@npm:^0.5.3":
-  version: 0.5.3
-  resolution: "@swc/helpers@npm:0.5.3"
-  dependencies:
-    tslib: "npm:^2.4.0"
-  checksum: 10c0/7003b9dafad38e27a4474a3dcf78d2aee85ce4bb7ee171ecc2d5b533768fb4f8fc9dbd6a1c3a9df5f8001e61ff416b93681e0a7dcbdc0df109b3e09c50cd4615
-  languageName: node
-  linkType: hard
-
-"@swc/helpers@npm:^0.5.6":
+"@swc/helpers@npm:^0.5.3, @swc/helpers@npm:^0.5.6":
   version: 0.5.6
   resolution: "@swc/helpers@npm:0.5.6"
   dependencies:
