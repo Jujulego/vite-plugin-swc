@@ -7,7 +7,7 @@ export interface SwcOptions extends Options {
 }
 
 // Plugin
-export function swc(opts: SwcOptions = {}): Plugin {
+export function swc(opts: SwcOptions = {}) {
   const include = opts.include ?? /\.[jt]sx?$/;
 
   return {
@@ -20,6 +20,20 @@ export function swc(opts: SwcOptions = {}): Plugin {
         if (resolution?.external) {
           return { id: source, external: true };
         }
+      }
+
+      if (source.match(/\.jsx?$/)) {
+        // Try resolving as js(x)
+        const resolvedJs = await this.resolve(source, importer, options);
+
+        if (resolvedJs) {
+          return resolvedJs;
+        }
+
+        // Try resolving as ts(x)
+        const ts = source.replace(/\.js(x?)$/, '.ts$1');
+
+        return await this.resolve(ts, importer, options);
       }
 
       return null;
@@ -36,5 +50,5 @@ export function swc(opts: SwcOptions = {}): Plugin {
         sourceMaps: true,
       });
     }
-  };
+  } satisfies Plugin;
 }
