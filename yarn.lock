@@ -513,7 +513,7 @@ __metadata:
   dependencies:
     "@jujulego/jill": "npm:2.5.2"
     "@microsoft/eslint-formatter-sarif": "npm:3.1.0"
-    "@rollup/plugin-swc": "npm:0.3.0"
+    "@rollup/plugin-swc": "npm:0.3.1"
     "@swc/cli": "npm:0.3.10"
     "@swc/core": "npm:1.4.8"
     "@swc/helpers": "npm:^0.5.6"
@@ -605,9 +605,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/plugin-swc@npm:0.3.0":
-  version: 0.3.0
-  resolution: "@rollup/plugin-swc@npm:0.3.0"
+"@rollup/plugin-swc@npm:0.3.1":
+  version: 0.3.1
+  resolution: "@rollup/plugin-swc@npm:0.3.1"
   dependencies:
     "@rollup/pluginutils": "npm:^5.0.1"
     smob: "npm:^1.4.0"
@@ -617,7 +617,7 @@ __metadata:
   peerDependenciesMeta:
     rollup:
       optional: true
-  checksum: 10c0/fbe698632e3c32b3a044a2ced51cf9b04dcdd967a38aa53110b451fff97a7e0d22f8a4b5d2b7c23d9fdf6aa75ae119b4de14cc67d4b313e997a8ab7991f5e85a
+  checksum: 10c0/aebdb6bb38b40f1b5c6edcac82af06bf233d20a27d2ef9882ee2c75df74ebff11385a0bac74b92ab967eaa1c3a6c5d79a0a67102f3f0ff2ea9f29e22ab3cc6e7
   languageName: node
   linkType: hard
 
