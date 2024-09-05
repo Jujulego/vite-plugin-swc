@@ -42,7 +42,7 @@
     "@rollup/plugin-swc": "0.3.1",
     "@swc/cli": "0.4.0",
     "@swc/core": "1.6.13",
-    "@types/node": "18.19.49",
+    "@types/node": "18.19.50",
     "@typescript-eslint/eslint-plugin": "7.18.0",
     "@typescript-eslint/parser": "7.18.0",
     "@vitest/coverage-v8": "2.0.5",
