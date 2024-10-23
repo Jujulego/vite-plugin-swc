@@ -41,7 +41,7 @@
     "@microsoft/eslint-formatter-sarif": "3.1.0",
     "@rollup/plugin-swc": "0.4.0",
     "@swc/cli": "0.4.0",
-    "@swc/core": "1.6.13",
+    "@swc/core": "1.7.39",
     "@types/node": "18.19.59",
     "@typescript-eslint/eslint-plugin": "7.18.0",
     "@typescript-eslint/parser": "7.18.0",
