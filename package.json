@@ -1,6 +1,6 @@
 {
   "name": "@jujulego/vite-plugin-swc",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "license": "MIT",
   "author": "Julien Capellari <julien.capellari@gmail.com>",
   "repository": "github:Jujulego/vite-plugin-swc",
