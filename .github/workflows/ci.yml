@@ -1,4 +1,4 @@
-name: 'Javascript'
+name: 'CI'
 
 on:
   push:
@@ -13,16 +13,20 @@ concurrency:
 
 jobs:
   build:
+    name: 'Build'
     runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
 
     steps:
-      - uses: actions/checkout@v5
+      - name: Checkout repository
+        uses: actions/checkout@v5.0.0
 
-      - name: Use Node.js 18.x
-        uses: actions/setup-node@v6
+      - name: Use Node.js
+        uses: actions/setup-node@v6.0.0
         with:
-          node-version: 22.x
-          cache: yarn
+          node-version: 24.x
 
       - name: Install
         run: yarn install --immutable
@@ -30,12 +34,13 @@ jobs:
       - name: Build
         run: yarn build
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4.6.2
         with:
           name: build
           path: dist
 
   lint:
+    name: 'Lint'
     runs-on: ubuntu-latest
 
     permissions:
@@ -43,13 +48,13 @@ jobs:
       security-events: write
 
     steps:
-      - uses: actions/checkout@v5
+      - name: Checkout repository
+        uses: actions/checkout@v5.0.0
 
-      - name: Use Node.js 18.x
-        uses: actions/setup-node@v6
+      - name: Use Node.js
+        uses: actions/setup-node@v6.0.0
         with:
-          node-version: 22.x
-          cache: yarn
+          node-version: 24.x
 
       - name: Install
         run: yarn install --immutable
@@ -59,22 +64,30 @@ jobs:
         run: yarn lint -f @microsoft/sarif -o eslint-results.sarif
 
       - name: Upload analysis results to GitHub
-        uses: github/codeql-action/upload-sarif@v4
+        uses: github/codeql-action/upload-sarif@v4.30.9
         with:
           sarif_file: eslint-results.sarif
           wait-for-processing: true
 
   tests:
+    name: 'Tests on node ${{ matrix.node }}'
     runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v5
+    permissions:
+      contents: read
 
-      - name: Use Node.js 18.x
-        uses: actions/setup-node@v6
+    strategy:
+      matrix:
+        node: ['18.x', '20.x', '22.x', '24.x']
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5.0.0
+
+      - name: Use Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v6.0.0
         with:
-          node-version: 22.x
-          cache: yarn
+          node-version: ${{ matrix.node }}
 
       - name: Install
         run: yarn install --immutable
@@ -82,74 +95,65 @@ jobs:
       - name: Run tests
         run: yarn test --coverage
 
-      - uses: actions/upload-artifact@v4
+      - name: Check tests typings
+        run: yarn test:types
+
+      - name: Upload results to Codecov
+        uses: codecov/codecov-action@v5
         with:
-          name: coverage
-          path: coverage
+          flags: unit,node-${{ matrix.node }}
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          files: junit-report.xml
+          flags: unit,node-${{ matrix.node }}
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   publish:
     if: ${{ github.event_name == 'push' }}
-    name: Publish to npm
+    name: 'Publish to npm'
 
     runs-on: ubuntu-latest
     environment: npm
     needs: [ lint, build, tests ]
+    
+    permissions:
+      contents: read
+      id-token: write
 
     steps:
-      - uses: actions/checkout@v5
+      - name: Checkout repository
+        uses: actions/checkout@v5.0.0
 
-      - name: Use Node.js 18.x
-        uses: actions/setup-node@v6
+      - name: Use Node.js
+        uses: actions/setup-node@v6.0.0
         with:
-          node-version: 22.x
+          node-version: 24.x
           registry-url: https://registry.npmjs.org
-          cache: yarn
 
-      - name: Install
-        run: yarn install --immutable
-
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@v5.0.0
         with:
           name: build
           path: dist
 
       - name: Publish
-        run: yarn npm publish --access public --tag ${{ github.ref_name }} --tolerate-republish
-        env:
-          YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-  sonarcloud:
-    if: ${{ !startsWith(github.head_ref, 'dependabot/') && !startsWith(github.head_ref, 'renovate/') }}
-    runs-on: ubuntu-latest
-    needs: [ tests ]
-
-    steps:
-      - uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
-
-      - name: Download test coverage
-        uses: actions/download-artifact@v5
-        continue-on-error: true
-        with:
-          name: coverage
-          path: coverage
-
-      - name: Load package.json
-        id: info
-        run: echo "version=$(jq -r ".version" package.json)" >> $GITHUB_OUTPUT
-
-      - name: Sonarcloud
-        uses: sonarsource/sonarcloud-github-action@v5.0
-        with:
-          args: >
-            -Dsonar.projectVersion=${{ steps.info.outputs.version }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        # language=Bash
+        run: |
+          name=$(jq -j ".name" package.json)
+          version=$(npm search $name --json | jq -j ".[] | select(.name==\"$name\") | .version")
+          
+          if [[ "$version" == "$(jq -j ".version" package.json)" ]]; then
+            echo "::notice::$version already exists in npm registry"
+          else
+            npm publish --access public --tag ${{ github.ref_name }} --provenance
+          fi
 
   release:
     if: ${{ github.event_name == 'push' }}
+    name: 'Publish release'
 
     runs-on: ubuntu-latest
     needs: [ publish ]
@@ -158,14 +162,16 @@ jobs:
       contents: write
 
     steps:
-      - uses: actions/checkout@v5
+      - name: Checkout repository
+        uses: actions/checkout@v5.0.0
 
       - name: Read package.json
         id: info
-        run: echo "version=$(jq -r ".version" package.json)" >> $GITHUB_OUTPUT
+        run: echo "version=$(jq -j ".version" package.json)" >> $GITHUB_OUTPUT
 
       - name: Tag version
         id: tag
+        # language=Bash
         run: |
           echo "::group::git fetch --tags"
           
@@ -193,5 +199,4 @@ jobs:
         with:
           name: ${{ steps.info.outputs.version }}
           tag_name: v${{ steps.info.outputs.version }}
-          draft: true
           generate_release_notes: true
