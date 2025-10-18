@@ -1,4 +1,4 @@
-import { transform, Options } from '@swc/core';
+import { transform, type Options } from '@swc/core';
 import { type Plugin } from 'vite';
 
 // Types

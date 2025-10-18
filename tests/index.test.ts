@@ -1,4 +1,4 @@
-import { PluginContext, ResolvedId } from 'rollup';
+import type { PluginContext, ResolvedId } from 'rollup';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { swc } from '@/src/index.js';
