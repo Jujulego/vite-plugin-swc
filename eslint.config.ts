@@ -1,14 +1,12 @@
-import eslint from '@eslint/js';
+import js from '@eslint/js';
 import vitest from '@vitest/eslint-plugin';
-import { defineConfig } from 'eslint/config';
-import tsEslint from 'typescript-eslint';
+import { defineConfig, globalIgnores } from 'eslint/config';
+import ts from 'typescript-eslint';
 
 export default defineConfig(
-  {
-    ignores: ['.pnp.*', '.yarn', 'coverage', 'dist']
-  },
-  eslint.configs.recommended,
-  tsEslint.configs.recommendedTypeChecked.map((cfg) => ({ ...cfg, files: ['**/*.{ts,tsx}'] })),
+  globalIgnores(['.pnp.*', '.yarn', 'coverage', 'dist']),
+  js.configs.recommended,
+  ts.configs.recommendedTypeChecked.map((cfg) => ({ ...cfg, files: ['**/*.{ts,tsx}'] })),
   {
     files: ['**/*.{js,jsx,ts,tsx}'],
     rules: {
