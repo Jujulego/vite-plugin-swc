@@ -36,7 +36,7 @@
     "@swc/helpers": "^0.5.6"
   },
   "devDependencies": {
-    "@eslint/js": "9.39.2",
+    "@eslint/js": "9.39.3",
     "@jujulego/jill": "3.0.7",
     "@microsoft/eslint-formatter-sarif": "3.1.0",
     "@rollup/plugin-swc": "0.4.0",
@@ -46,7 +46,7 @@
     "@typescript-eslint/utils": "8.56.0",
     "@vitest/coverage-v8": "3.2.4",
     "@vitest/eslint-plugin": "1.6.9",
-    "eslint": "9.39.2",
+    "eslint": "9.39.3",
     "jiti": "2.6.1",
     "rollup": "4.58.0",
     "shx": "0.4.0",
