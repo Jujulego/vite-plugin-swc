@@ -99,7 +99,7 @@ jobs:
         run: yarn test:types
 
       - name: Upload results to Codecov
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v6
         with:
           flags: unit,node-${{ matrix.node }}
           token: ${{ secrets.CODECOV_TOKEN }}
